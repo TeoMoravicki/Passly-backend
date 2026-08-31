@@ -15,7 +15,3 @@ def get_events():
 def get_event(event_id: int):
     return service.get_event(event_id)
 
-
-@router.post("/")
-def create_event(name: str):
-    return service.create_event(name)
