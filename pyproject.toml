@@ -1,0 +1,16 @@
+[project]
+name = "pasly-backend"
+version = "0.1.0"
+description = "Add your description here"
+authors = [
+    { name = "Teo", email = "Teobenjaminmoravicki@gmail.com" }
+]
+requires-python = ">=3.14"
+dependencies = []
+
+[project.scripts]
+pasly-backend = "pasly_backend:main"
+
+[build-system]
+requires = ["uv_build>=0.12.7,<0.13.0"]
+build-backend = "uv_build"
