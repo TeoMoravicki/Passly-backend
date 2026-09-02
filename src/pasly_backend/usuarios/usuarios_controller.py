@@ -1,10 +1,6 @@
 from fastapi import APIRouter, Depends, Header, HTTPException, status
 
-from .usuarios_dto import (
-    LoginRequest,
-    UserCreate,
-    UserResponse,
-)
+from .usuarios_dto import LoginRequest, UserCreate, UserResponse
 from .usuarios_model import User
 from .usuarios_service import UserService
 
@@ -28,8 +24,8 @@ def obtener_usuario_autenticado(x_user_id: int = Header(..., alias="X-User-Id"))
 @router.post("/", response_model=UserResponse, status_code=201)
 def create_user(payload: UserCreate):
     return service.create_user(
-        payload.name, payload.email, payload.password, payload.birth_date.strftime('%d/%m/%Y')
-        )
+        payload.name, payload.email, payload.password, payload.birth_date.isoformat()
+    )
 
 @router.get("/", response_model=list[UserResponse])
 def list_users():

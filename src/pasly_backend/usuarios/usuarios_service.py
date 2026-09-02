@@ -10,7 +10,6 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
 class UserService:
-    # Alta 
     def create_user(self, name: str, email: str, password: str, birth_date: str) -> User:
         password_hash = pwd_context.hash(password)
 
@@ -30,62 +29,33 @@ class UserService:
         finally:
             connection.close()
         if nuevo_id is None:
-                    raise HTTPException(
-                        status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                        detail="Error al generar el identificador del usuario",
-                    )
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Error al crear el usuario",
+            )
         return self.get_user(nuevo_id)
 
-    # Lectura
     def get_user(self, user_id: int) -> User:
         connection = get_connection()
         try:
             row = connection.execute(
                 "SELECT * FROM users WHERE id = ?", (user_id,)
             ).fetchone()
-            if row is None:
-                raise HTTPException(status_code=404, detail="Usuario no encontrado")
-
-            name, password_hash = self._estado_vigente(
-                connection, user_id, row["name"], row["password_hash"]
-            )
         finally:
             connection.close()
 
-        return User(
-            id=row["id"],
-            name=name,
-            email=row["email"],
-            password_hash=password_hash,
-            birth_date=row["birth_date"],
-            created_at=row["created_at"],
-        )
+        if row is None:
+            raise HTTPException(status_code=404, detail="Usuario no encontrado")
+        return User.from_row(row)
 
     def list_users(self) -> list[User]:
         connection = get_connection()
         try:
             rows = connection.execute("SELECT * FROM users").fetchall()
-            usuarios = []
-            for row in rows:
-                name, password_hash = self._estado_vigente(
-                    connection, row["id"], row["name"], row["password_hash"]
-                )
-                usuarios.append(
-                    User(
-                        id=row["id"],
-                        name=name,
-                        email=row["email"],
-                        password_hash=password_hash,
-                        birth_date=row["birth_date"],
-                        created_at=row["created_at"],
-                    )
-                )
         finally:
             connection.close()
-        return usuarios
+        return [User.from_row(r) for r in rows]
 
-
-    # Login (autenticacion)
     def authenticate(self, email: str, password: str) -> User:
         connection = get_connection()
         try:
@@ -108,16 +78,3 @@ class UserService:
             raise credenciales_invalidas
 
         return usuario
-
-    
-    #resuelve name + password_hash vigentes
-    def _estado_vigente(
-        self, connection, user_id: int, name_original: str, hash_original: str
-    ) -> tuple[str, str]:
-        row = connection.execute(
-            "SELECT name, password_hash FROM user_updates WHERE user_id = ? ORDER BY id DESC LIMIT 1",
-            (user_id,),
-        ).fetchone()
-        if row is None:
-            return name_original, hash_original
-        return row["name"], row["password_hash"]
