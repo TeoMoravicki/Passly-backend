@@ -24,4 +24,3 @@ class EventosService:
             if evento["id"] == event_id:
                 return evento
         return {"error": "Evento no encontrado"}
-

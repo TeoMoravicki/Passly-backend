@@ -14,4 +14,3 @@ def get_events(self=None):
 @router.get("/{event_id}")
 def get_event(event_id: int):
     return service.get_event(event_id)
-
