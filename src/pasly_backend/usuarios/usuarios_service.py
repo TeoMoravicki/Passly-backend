@@ -110,46 +110,6 @@ class UserService:
         return usuario
 
     
-    # Actualizar perfil
-    
-    def update_name(self, user_id: int, new_name: str) -> User:
-        usuario_actual = self.get_user(user_id)  # valida que exista (404 si no)
-
-        connection = get_connection()
-        try:
-            connection.execute(
-                "INSERT INTO user_updates (user_id, name, password_hash) VALUES (?, ?, ?)",
-                (user_id, new_name, usuario_actual.password_hash),
-            )
-            connection.commit()
-        finally:
-            connection.close()
-
-        return self.get_user(user_id)
-
-    # Cambiar contraseña
-
-    def change_password(self, user_id: int, current_password: str, new_password: str) -> None:
-        usuario_actual = self.get_user(user_id)
-
-        if not pwd_context.verify(current_password, usuario_actual.password_hash):
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="La contraseña actual no es correcta",
-            )
-
-        nuevo_hash = pwd_context.hash(new_password)
-        connection = get_connection()
-        try:
-            connection.execute(
-                "INSERT INTO user_updates (user_id, name, password_hash) VALUES (?, ?, ?)",
-                (user_id, usuario_actual.name, nuevo_hash),
-            )
-            connection.commit()
-        finally:
-            connection.close()
-
-
     #resuelve name + password_hash vigentes
     def _estado_vigente(
         self, connection, user_id: int, name_original: str, hash_original: str

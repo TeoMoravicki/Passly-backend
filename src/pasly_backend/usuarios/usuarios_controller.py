@@ -1,10 +1,7 @@
 from fastapi import APIRouter, Depends, Header, HTTPException, status
 
 from .usuarios_dto import (
-    ChangePasswordRequest,
     LoginRequest,
-    MessageResponse,
-    UpdateProfileRequest,
     UserCreate,
     UserResponse,
 )
@@ -31,7 +28,7 @@ def obtener_usuario_autenticado(x_user_id: int = Header(..., alias="X-User-Id"))
 @router.post("/", response_model=UserResponse, status_code=201)
 def create_user(payload: UserCreate):
     return service.create_user(
-        payload.name, payload.email, payload.password, payload.birth_date.isoformat()
+        payload.name, payload.email, payload.password, payload.birth_date.strftime('%d/%m/%Y')
         )
 
 @router.get("/", response_model=list[UserResponse])
@@ -51,23 +48,6 @@ def login(payload: LoginRequest):
 @router.get("/me", response_model=UserResponse)
 def get_my_profile(usuario: User = Depends(obtener_usuario_autenticado)):
     return usuario
-
-
-@router.patch("/me", response_model=UserResponse)
-def update_my_profile(
-    payload: UpdateProfileRequest,
-    usuario: User = Depends(obtener_usuario_autenticado),
-):
-    return service.update_name(usuario.id, payload.name)
-
-
-@router.post("/me/change-password", response_model=MessageResponse)
-def change_my_password(
-    payload: ChangePasswordRequest,
-    usuario: User = Depends(obtener_usuario_autenticado),
-):
-    service.change_password(usuario.id, payload.current_password, payload.new_password)
-    return MessageResponse(message="Contraseña actualizada correctamente")
 
 
 # Consulta por id
