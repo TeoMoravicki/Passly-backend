@@ -5,4 +5,3 @@ class EventosService:
 
     def get_event(self, event_id: int):
         return {"message": f"Evento {event_id}"}
-
