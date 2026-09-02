@@ -1,6 +1,6 @@
 import uuid
 
-# "Base de datos" en memoria (igual que la lista de events de tu amigo)
+# Base de datos en memoria
 tickets = []
 ticket_id_counter = 1
 
@@ -15,17 +15,17 @@ def get_all_tickets():
 def get_ticket(ticket_id: int):
     """Busca un ticket por su ID (igual que GET /events/{id})"""
     for ticket in tickets:
-        if ticket["id"] == ticket_id:
-            return ticket
+        if ticket["id"] == ticket_id:  # ✅ 8 espacios
+            return ticket              # ✅ 12 espacios
     return None
 
 def create_ticket(user_id: int, event_id: int):
-    """Crea un nuevo ticket (igual que POST /events/ pero con identifier único)"""
+    """Crea un nuevo ticket"""
     global ticket_id_counter
-    
+
     # Generar identificador único
     identifier = generar_identifier()
-    
+
     # Crear el ticket con ID autoincremental
     new_ticket = {
         "id": ticket_id_counter,
@@ -33,9 +33,9 @@ def create_ticket(user_id: int, event_id: int):
         "event_id": event_id,
         "identifier": identifier
     }
-    
+
     # Guardar en la "base de datos"
     tickets.append(new_ticket)
     ticket_id_counter += 1
-    
+
     return new_ticket
