@@ -7,8 +7,8 @@ service = EventosService()
 
 
 @router.get("/")
-def get_events():
-    return service.get_events()
+def get_events(self=None):
+    return service.get_events
 
 
 @router.get("/{event_id}")
