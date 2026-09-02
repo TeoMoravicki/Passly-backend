@@ -42,3 +42,4 @@ class EventosService:
                 eliminado = self.eventos.pop(i)
                 return {"message": "Evento eliminado", "evento": eliminado}
         return {"error": "Evento no encontrado"}
+        return {"message": f"Evento {event_id}"}
