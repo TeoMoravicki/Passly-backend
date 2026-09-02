@@ -5,6 +5,7 @@ app = FastAPI()
 
 
 app.include_router(eventos_router)
+app.include_router(eventos_router, tags=["eventos"])
 
 
 @app.get("/")
