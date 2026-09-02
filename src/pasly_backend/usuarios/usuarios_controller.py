@@ -32,8 +32,7 @@ def obtener_usuario_autenticado(x_user_id: int = Header(..., alias="X-User-Id"))
 def create_user(payload: UserCreate):
     return service.create_user(
         payload.name, payload.email, payload.password, payload.birth_date.isoformat()
-    )
-
+        )
 
 @router.get("/", response_model=list[UserResponse])
 def list_users():
