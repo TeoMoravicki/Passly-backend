@@ -16,8 +16,8 @@ class UserService:
         connection = get_connection()
         try:
             cursor = connection.execute(
-                "INSERT INTO users (name, email, password_hash, birth_date) VALUES (?, ?, ?, ?)",
-                (name, email, password_hash, birth_date),
+                "INSERT INTO users (name, email, password_hash, birth_date, role) VALUES (?, ?, ?, ?, ?)",
+                (name, email, password_hash, birth_date, 'usuario'),
             )
             connection.commit()
             nuevo_id = cursor.lastrowid
