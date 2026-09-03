@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/Pasly-backend.iml" filepath="$PROJECT_DIR$/.idea/Pasly-backend.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/pasly-backend.iml" filepath="$PROJECT_DIR$/.idea/pasly-backend.iml" />
     </modules>
   </component>
 </project>
