@@ -1,3 +1,8 @@
+import qrcode
+import os
+
+os.makedirs("static", exist_ok=True)
+
 class EventosService:
     def __init__(self):
         self.eventos = [
@@ -47,7 +52,9 @@ class EventosService:
         event_id = compra_data["event_id"]
         cantidad = compra_data["cantidad"]
         categoria_seleccionada = compra_data["categoria"]
+        email = compra_data["comprador_email"]
 
+        # Buscar el evento
         evento_encontrado = None
         for evento in self.eventos:
             if evento["id"] == event_id:
@@ -56,7 +63,6 @@ class EventosService:
 
         if not evento_encontrado:
             return {"error": "Rechazar compra: Evento no encontrado"}
-
 
         if evento_encontrado["categoria"].lower() != categoria_seleccionada.lower():
             return {"error": "Rechazar compra: La categoría no coincide con el evento"}
@@ -68,26 +74,50 @@ class EventosService:
 
         LIMITE_MAXIMO = 5
         if cantidad > LIMITE_MAXIMO:
-            return {"error": f"Rechazar compra: Supera el límite permitido por compra ({LIMITE_MAXIMO} entradas)"}
+            return {"error": f"Rechazar compra: Supera el límite permitido ({LIMITE_MAXIMO} entradas)"}
 
-
+        # Calcular total y reservar stock
         total_pagar = cantidad * evento_encontrado["precio"]
-
-
         evento_encontrado["entradasdisponibles"] -= cantidad
 
-        compra_id = 999
-        resumen_compra = {
-            "compra_id": compra_id,
-            "evento": evento_encontrado["nombre"],
-            "categoria": categoria_seleccionada,
-            "cantidad": cantidad,
-            "total_calculado": total_pagar,
-            "estado_stock": f"Stock actualizado. Quedan {evento_encontrado['entradasdisponibles']}",
-            "ticket_generado": f"TICKET-EV{event_id}-Q{cantidad}",
-            "qr_code": f"https://api.qrserver.com/v1/create-qr-code/?data=TICKET-{compra_id}",
-            "comprobante": "Emitido correctamente",
-            "status": "COMPRA OK"
-        }
+        compra_id = len(evento_encontrado) + 1500  # ID simulado de compra único
 
-        return resumen_compra
+        # 1. Crear el texto que contendrá el QR con toda la info de la compra
+        info_qr = (
+            f"ID_COMPRA: {compra_id} | "
+            f"EVENTO: {evento_encontrado['nombre']} | "
+            f"CATEGORIA: {categoria_seleccionada} | "
+            f"CANTIDAD: {cantidad} | "
+            f"TOTAL: ${total_pagar} | "
+            f"COMPRADOR: {email}"
+        )
+
+        # 2. Generar la imagen física del QR
+        qr = qrcode.QRCode(version=1, box_size=10, border=5)
+        qr.add_data(info_qr)
+        qr.make(fit=True)
+
+        img = qr.make_image(fill_color="black", back_color="white")
+
+        # 3. Guardar la imagen QR en la carpeta static
+        ruta_qr = f"static/qr_compra_{compra_id}.png"
+        img.save(ruta_qr)
+
+        # 4. Retornar el comprobante con la ruta del QR generado
+        return {
+            "estado": "COMPRA OK",
+            "mensaje": "¡Entradas compradas y comprobante generado con éxito!",
+            "comprobante": {
+                "compra_id": compra_id,
+                "evento": evento_encontrado["nombre"],
+                "categoria": categoria_seleccionada,
+                "entradas_compradas": cantidad,
+                "total_abonado": f"${total_pagar}",
+                "comprador": email,
+                "stock_remanente": evento_encontrado['entradasdisponibles']
+            },
+            "qr_generado": {
+                "contenido_codificado": info_qr,
+                "archivo_qr": ruta_qr  # Ruta física del QR guardado en tu proyecto
+            }
+        }
