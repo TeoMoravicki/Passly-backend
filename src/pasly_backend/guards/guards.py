@@ -12,7 +12,7 @@ def obtener_usuario_autenticado(x_user_id: int = Header(..., alias="X-User-Id"))
     except HTTPException:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Usuario no autenticado o X-User-Id invalido",
+            detail="Usuario no autenticado o User-Id invalido",
         )
 
 

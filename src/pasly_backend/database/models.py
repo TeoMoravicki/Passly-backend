@@ -11,6 +11,7 @@ def create_tables():
             email TEXT NOT NULL UNIQUE,
             password_hash TEXT NOT NULL,
             birth_date TEXT NOT NULL,
+            role TEXT NOT NULL CHECK (role IN ('usuario', 'administrador')),
             created_at TEXT NOT NULL DEFAULT (datetime('now'))
         )
     """)

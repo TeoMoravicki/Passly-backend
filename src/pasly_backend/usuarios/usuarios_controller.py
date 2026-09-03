@@ -16,11 +16,11 @@ def create_user(payload: UserCreate):
         payload.name,
         payload.email,
         payload.password,
-        payload.birth_date.isoformat(),
+        payload.birth_date.strftime("%d-%m-%Y"),
     )
 
-@router.get("/", response_model=list[UserResponse])
-def list_users(usuario: User = Depends(requiere_admin)):
+@router.get("/", response_model=list[UserResponse], dependencies=[Depends(requiere_admin)])
+def list_users(usuario: User):
     return service.list_users()
 
 
