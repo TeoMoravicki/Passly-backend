@@ -121,3 +121,4 @@ class EventosService:
                 "archivo_qr": ruta_qr  # Ruta física del QR guardado en tu proyecto
             }
         }
+        return {"message": f"Evento {event_id}"}
