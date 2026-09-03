@@ -1,7 +1,6 @@
 import sqlite3
 from dataclasses import dataclass
 
-
 @dataclass(frozen=True)
 class User:
     id: int
@@ -9,6 +8,7 @@ class User:
     email: str
     password_hash: str
     birth_date: str
+    role: str
     created_at: str
 
     @classmethod
@@ -19,5 +19,6 @@ class User:
             email=row["email"],
             password_hash=row["password_hash"],
             birth_date=row["birth_date"],
+            role=row["role"],
             created_at=row["created_at"],
         )

@@ -1,6 +1,8 @@
 from datetime import date
-
+from typing import Literal
 from pydantic import BaseModel, ConfigDict, EmailStr, Field
+
+Rol = Literal["usuario", "administrador"]
 
 
 class UserCreate(BaseModel):
@@ -17,10 +19,10 @@ class UserResponse(BaseModel):
     name: str
     email: EmailStr
     birth_date: date
+    role: Rol
     created_at: str
 
 
 class LoginRequest(BaseModel):
     email: EmailStr
     password: str
-
