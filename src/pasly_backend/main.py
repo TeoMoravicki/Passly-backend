@@ -4,6 +4,7 @@ from .eventos.eventos_controller import router as eventos_router
 from .eventosAdmin.admin_controller import router as admin_router
 from .eventos.compras_controller import router as compras_router
 from .ticktes.tickets_controller import router as tickets_router
+from .funciones.funciones_controller import router as funciones_router
 from .usuarios.usuarios_controller import router as usuarios_router
 
 app = FastAPI()
@@ -11,6 +12,7 @@ app.include_router(eventos_router)
 app.include_router(admin_router)
 app.include_router(compras_router)
 app.include_router(tickets_router)
+app.include_router(funciones_router)
 app.include_router(usuarios_router)
 
 create_tables()

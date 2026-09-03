@@ -1,41 +1,56 @@
 import uuid
 
-# Base de datos en memoria
 tickets = []
 ticket_id_counter = 1
 
 def generar_identifier():
-    """Genera un identificador único para el ticket"""
     return f"TICKET-{uuid.uuid4().hex[:8].upper()}"
 
 def get_all_tickets():
-    """Obtiene todos los tickets (igual que GET /events)"""
     return tickets
 
 def get_ticket(ticket_id: int):
-    """Busca un ticket por su ID (igual que GET /events/{id})"""
     for ticket in tickets:
-        if ticket["id"] == ticket_id:  # ✅ 8 espacios
-            return ticket              # ✅ 12 espacios
+        if ticket["id"] == ticket_id:
+            return ticket
     return None
 
-def create_ticket(user_id: int, event_id: int):
-    """Crea un nuevo ticket"""
+def get_tickets_by_compra(compra_id: int):
+    resultado = []
+    for ticket in tickets:
+        if ticket["compra_id"] == compra_id:
+            resultado.append(ticket)
+    return resultado
+
+
+def create_ticket(user_id: int, funcion_id: int, compra_id: int):
     global ticket_id_counter
 
-    # Generar identificador único
     identifier = generar_identifier()
 
-    # Crear el ticket con ID autoincremental
     new_ticket = {
         "id": ticket_id_counter,
         "user_id": user_id,
-        "event_id": event_id,
-        "identifier": identifier
+        "funcion_id": funcion_id,
+        "compra_id": compra_id,
+        "identifier": identifier,
+        "estado": "ACTIVO"
     }
 
-    # Guardar en la "base de datos"
     tickets.append(new_ticket)
-    ticket_id_counter += 1
 
+    ticket_id_counter += 1
     return new_ticket
+
+
+def update_ticket_estado(ticket_id: int, nuevo_estado: str):
+    estados_validos = ["ACTIVO", "USADO", "CANCELADO"]
+    
+    if nuevo_estado.upper() not in estados_validos:
+        return {"error": "Estado de ticket no válido"}
+
+    for ticket in tickets:
+        if ticket["id"] == ticket_id:
+            ticket["estado"] = nuevo_estado.upper()
+            return ticket
+    return None
