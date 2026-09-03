@@ -11,3 +11,9 @@ class EventoDTO(BaseModel):
     categoria: str
     estado: str
     imagen: str
+
+
+class CompraCreate(BaseModel):
+    event_id: int
+    cantidad_entradas: int
+    categoria: str
