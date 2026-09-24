@@ -5,7 +5,6 @@ router = APIRouter(prefix="/eventos", tags=["Eventos"])
 
 service = EventosService()
 
-
 @router.get("/")
 def get_events():
     return service.get_events()

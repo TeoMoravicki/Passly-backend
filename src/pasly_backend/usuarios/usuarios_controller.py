@@ -17,9 +17,14 @@ def create_user(payload: UserCreate):
         payload.email,
         payload.password,
         payload.birth_date.strftime("%d-%m-%Y"),
+<<<<<<< HEAD
 
     )
 
+=======
+    )
+
+>>>>>>> origin
 @router.get("/", response_model=list[UserResponse], dependencies=[Depends(requiere_admin)])
 def list_users(usuario: User):
     return service.list_users()

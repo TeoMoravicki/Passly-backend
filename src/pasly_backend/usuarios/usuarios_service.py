@@ -77,4 +77,8 @@ class UserService:
         if not pwd_context.verify(password, usuario.password_hash):
             raise credenciales_invalidas
 
+<<<<<<< HEAD
         return usuario
+=======
+        return usuario
+>>>>>>> origin

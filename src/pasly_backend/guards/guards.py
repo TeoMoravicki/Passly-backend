@@ -28,5 +28,4 @@ def requiere_rol(rol_requerido: str):
 
     return _verificar
 
-
 requiere_admin = requiere_rol("administrador")

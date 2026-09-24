@@ -1,0 +1,14 @@
+# Python bytecode cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# SQLite database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Distribution / packaging
+*.egg-info/
+dist/
+build/

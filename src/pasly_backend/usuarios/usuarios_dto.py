@@ -36,4 +36,8 @@ class UserResponse(BaseModel):
 
 class LoginRequest(BaseModel):
     email: EmailStr
+<<<<<<< HEAD
     password: str
+=======
+    password: str
+>>>>>>> origin
