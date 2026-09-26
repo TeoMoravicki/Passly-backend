@@ -1,17 +1,13 @@
 from fastapi import APIRouter, HTTPException
-from .funciones_module import FuncionCreate
-from .funciones_service import (
-    get_all_funciones,
-    get_funcion,
-    create_funcion,
-    get_funciones_by_evento
-)
+
+from . import funciones_service
+
 
 router = APIRouter(prefix="/funciones", tags=["Funciones"])
 
 @router.get("/")
 def get_funciones():
-    return get_all_funciones()
+    return funciones_service.get_funciones()
 
 @router.get("/evento/{evento_id}")
 def get_funciones_by_evento_id(evento_id: int):

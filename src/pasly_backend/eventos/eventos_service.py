@@ -26,7 +26,7 @@ class EventosService:
 
         return evento
 
-    def get_event(
+    def get_event_by_id(
             self,
             db: Session,
             event_id: int

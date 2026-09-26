@@ -1,16 +1,63 @@
-from pydantic import BaseModel
+from sqlalchemy import String, Integer, Float, Date, Time
+from sqlalchemy.orm import Mapped, mapped_column
 
-class FuncionCreate(BaseModel):
-    evento_id: int
-    fecha: str
-    horario: str
-    capacidad_maxima: int
+from  pasly_backend.database.database import Base
 
-class FuncionResponse(BaseModel):
-    id: int
-    evento_id: int
-    fecha: str
-    horario: str
-    capacidad_maxima: int
-    entradas_disponibles: int
-    estado: str
+
+class Funciones(Base):
+    __tablename__ = "funciones"
+
+    id: Mapped[int] = mapped_column(
+        primary_key=True,
+        autoincrement=True
+    )
+
+    nombre: Mapped[str] = mapped_column(
+        String(100),
+        nullable=False
+    )
+
+    horario: Mapped[Time] = mapped_column(
+        Time,
+        nullable=False
+    )
+
+    entradas_disponibles: Mapped[int] = mapped_column(
+        Integer,
+        nullable=False
+    )
+
+    descripcion: Mapped[str] = mapped_column(
+        String(500),
+        nullable=True
+    )
+
+    lugar: Mapped[str] = mapped_column(
+        String(200),
+        nullable=False
+    )
+
+    fecha: Mapped[Date] = mapped_column(
+        Date,
+        nullable=False
+    )
+
+    precio: Mapped[float] = mapped_column(
+        Float,
+        nullable=False
+    )
+
+    categoria_id: Mapped[str] = mapped_column(
+        String(100),
+        nullable=False
+    )
+
+    estado: Mapped[str] = mapped_column(
+        String(50),
+        nullable=False
+    )
+
+    imagen: Mapped[str] = mapped_column(
+        String(500),
+        nullable=True
+    )

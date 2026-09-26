@@ -15,8 +15,8 @@ def get_events():
 
 
 @router.get("/{event_id}")
-def get_event(event_id: int):
-    return service.get_event(event_id)
+def get_event_by_id(event_id: int):
+    return service.get_event_by_id(event_id)
 
 @router.post("/")
 def create_event( data: EventCreateDTO,
