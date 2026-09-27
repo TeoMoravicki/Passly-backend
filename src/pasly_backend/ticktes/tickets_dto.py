@@ -11,6 +11,7 @@ class TicketCreateDTO(BaseModel):
 class TicketResponseDTO(BaseModel):
     id: int
     qr: str
+    estado: str
     funcion_id: int
     usuario_id: int
     categoria_id: int

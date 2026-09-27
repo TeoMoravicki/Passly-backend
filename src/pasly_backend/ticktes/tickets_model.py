@@ -20,18 +20,23 @@ class Ticket(Base):
         nullable=False
     )
 
+    estado: Mapped[str] = mapped_column(
+        String(255),
+        nullable=False
+    )
+
     funcion_id: Mapped[int] = mapped_column(
         ForeignKey("funciones.id"),
         nullable=False
     )
 
     usuario_id: Mapped[int] = mapped_column(
-        ForeignKey("users.id"),
+        ForeignKey("usuarios.id"),
         nullable=False
     )
 
     categoria_id: Mapped[int] = mapped_column(
-        ForeignKey("event_categories.id"),
+        ForeignKey("categoria.id"),
         nullable=False
     )
 
