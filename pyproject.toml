@@ -14,10 +14,14 @@ dependencies = [
     "schemas>=0.7.1",
     "passlib[bcrypt]>=1.7.4",
 <<<<<<< HEAD
+<<<<<<< HEAD
     "bcrypt==4.0.1",
 =======
      "bcrypt==4.0.1",
 >>>>>>> origin
+=======
+    "bcrypt==4.0.1",
+>>>>>>> fix
     "sqlalchemy>=2.0.52",
 ]
 
