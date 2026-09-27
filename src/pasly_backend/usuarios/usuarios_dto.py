@@ -36,8 +36,7 @@ class UserResponse(BaseModel):
 
 class LoginRequest(BaseModel):
     email: EmailStr
-<<<<<<< HEAD
     password: str
-=======
-    password: str
->>>>>>> origin
+
+class AsignarRolRequest(BaseModel):
+    rol: str
