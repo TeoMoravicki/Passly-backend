@@ -4,8 +4,8 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from  pasly_backend.database.database import Base
 
 
-class Eventos(Base):
-    __tablename__ = "eventos"
+class Categoria(Base):
+    __tablename__ = "categoria"
 
     id: Mapped[int] = mapped_column(
         primary_key=True,
@@ -17,35 +17,14 @@ class Eventos(Base):
         nullable=False
     )
 
-    descripcion: Mapped[str] = mapped_column(
-        String(500),
-        nullable=False
-    )
-
-    capacidad_maxima: Mapped[int] = mapped_column(
+    precio: Mapped[int] = mapped_column(
         Integer,
         nullable=False
     )
-
 
     lugar: Mapped[str] = mapped_column(
-        String(200),
+        String(100),
         nullable=False
-    )
-
-    precio_base: Mapped[int] = mapped_column(
-        Integer,
-        nullable=False
-    )
-
-    estado: Mapped[str] = mapped_column(
-        String(50),
-        nullable=False
-    )
-
-    imagen: Mapped[str] = mapped_column(
-        String(500),
-        nullable=True
     )
 
     funciones = relationship(

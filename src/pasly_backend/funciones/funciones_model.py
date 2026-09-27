@@ -4,8 +4,8 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from  pasly_backend.database.database import Base
 
 
-class Compra(Base):
-    __tablename__ = "compras"
+class Funcion(Base):
+    __tablename__ = "funciones"
 
     id: Mapped[int] = mapped_column(
         primary_key=True,
@@ -17,27 +17,22 @@ class Compra(Base):
         nullable=False
     )
 
-    monto: Mapped[int] = mapped_column(
+    horario: Mapped[Time] = mapped_column(
+        Time,
+        nullable=False
+    )
+
+    capacidad_maxima: Mapped[int] = mapped_column(
         Integer,
         nullable=False
     )
 
-    ticket_id: Mapped[int] = mapped_column(
-        ForeignKey("tickets.id"),
-        nullable=False
-    )
-
-    usuario_id: Mapped[int] = mapped_column(
-        ForeignKey("usuarios.id"),
+    evento_id: Mapped[int] = mapped_column(
+        ForeignKey("eventos.id"),
         nullable=False
     )
 
     evento = relationship(
-        "Eventos",
-        back_populates="funciones"
-    )
-
-    ticket = relationship(
-        "Ticket",
+        "Evento",
         back_populates="funciones"
     )

@@ -1,5 +1,6 @@
 from fastapi import APIRouter, HTTPException
-from .tickets_module import TicketCreate
+
+from .tickets_dto import TicketCreateDTO
 from .tickets_service import (
     get_all_tickets,
     get_ticket,
@@ -36,9 +37,9 @@ def get_ticket_by_id(ticket_id: int):
     return ticket
 
 @router.post("/")
-def create_new_ticket(ticket: TicketCreate):
+def create_new_ticket(ticket: TicketCreateDTO):
     return create_ticket(
-        ticket.user_id,
+        ticket.usuario_id,
         ticket.funcion_id,
-        ticket.compra_id
+        ticket.categoria_id
     )

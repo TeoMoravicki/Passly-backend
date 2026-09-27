@@ -1,29 +1,22 @@
-from sqlalchemy import String, Integer, Float, Date, Time
 from pydantic import BaseModel
 
 
 class EventCreateDTO(BaseModel):
     nombre: str
-    horario: Time
-    entradas_disponibles: int
     descripcion: str
+    capacidad_maxima: int
     lugar: str
-    fecha: Date
-    precio: int
-    categoria_id: str
+    precio_base: int
     estado: str
 
 
 class EventResponseDTO(BaseModel):
     id: int
     nombre: str
-    horario: Time
-    entradas_disponibles: int
-    descripcion: str | None
+    descripcion: str
+    capacidad_maxima: int
     lugar: str
-    fecha: Date
-    precio: int
-    categoria_id: int
+    precio_base: int
     estado: str
 
     model_config = {
