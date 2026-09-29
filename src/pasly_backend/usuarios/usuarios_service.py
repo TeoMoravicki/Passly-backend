@@ -3,13 +3,14 @@ import sqlite3
 from fastapi import HTTPException, status
 from passlib.context import CryptContext
 
-from ..database.database import get_connection
+#from ..database.database import get_connection
 from .usuarios_model import User
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
 class UserService:
+    '''
     def create_user(self, name: str, email: str, password: str, birth_date: str) -> User:
         password_hash = pwd_context.hash(password)
 
@@ -77,4 +78,4 @@ class UserService:
         if not pwd_context.verify(password, usuario.password_hash):
             raise credenciales_invalidas
 
-        return usuario
+        return usuario'''

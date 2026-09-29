@@ -1,6 +1,5 @@
-from .database import get_connection
-
-
+#from .database import get_connection
+'''
 def create_tables():
     connection = get_connection()
 
@@ -18,3 +17,4 @@ def create_tables():
 
     connection.commit()
     connection.close()
+'''

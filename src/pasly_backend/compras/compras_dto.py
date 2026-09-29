@@ -1,8 +1,10 @@
+from datetime import date
+
 from sqlalchemy import String, Integer, Float, Date, Time
 from pydantic import BaseModel
 
 class CompraCreateDTO(BaseModel):
-    fecha: Date
+    fecha: date
     monto: int
     ticket_id: int
     funcion_id: int
@@ -10,7 +12,7 @@ class CompraCreateDTO(BaseModel):
 
 class CompraResponseDTO(BaseModel):
     id: int
-    fecha: Date
+    fecha: date
     monto: int
     ticket_id: int
     funcion_id: int
