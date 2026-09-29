@@ -13,7 +13,7 @@ service = funciones_service.FuncionesService()
 def get_funciones(db: Session = Depends(get_db)):
     return service.get_funciones(db)
 
-@router.get("/")
+@router.get("/id/{event_id}")
 def get_funcion_by_event_id(event_id: int,
                             db: Session = Depends(get_db)
                             ):
