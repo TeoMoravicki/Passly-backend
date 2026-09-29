@@ -26,8 +26,3 @@ class Categoria(Base):
         String(100),
         nullable=False
     )
-
-    funciones = relationship(
-        "Funcion",
-        back_populates="evento"
-    )

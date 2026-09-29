@@ -1,16 +1,17 @@
 from sqlalchemy import String, Integer, Float, Date, Time
 from pydantic import BaseModel
 
+from datetime import date
+
 class CompraCreateDTO(BaseModel):
-    fecha: Date
+    fecha: date
     monto: int
     ticket_id: int
-    funcion_id: int
 
 
 class CompraResponseDTO(BaseModel):
     id: int
-    fecha: Date
+    fecha: date
     monto: int
     ticket_id: int
     funcion_id: int

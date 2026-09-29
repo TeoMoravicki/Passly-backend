@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from .database.models import create_tables
-#from .database.create_admin import create_admin_user
+from .database.create_admin import create_admin_user
 from .eventos.eventos_controller import router as eventos_router
 from pasly_backend.compras.compras_controller import router as compras_router
 from .ticktes.tickets_controller import router as tickets_router
@@ -15,7 +15,7 @@ app.include_router(funciones_router)
 app.include_router(usuarios_router)
 
 create_tables()
-#init_db()
+create_admin_user()
 
 @app.get("/")
 def root():

@@ -13,16 +13,10 @@ dependencies = [
     "pydantic-core>=2.46.5",
     "schemas>=0.7.1",
     "passlib[bcrypt]>=1.7.4",
-<<<<<<< HEAD
-<<<<<<< HEAD
     "bcrypt==4.0.1",
-=======
-     "bcrypt==4.0.1",
->>>>>>> origin
-=======
-    "bcrypt==4.0.1",
->>>>>>> fix
     "sqlalchemy>=2.0.52",
+    "pyjwt>=2.9.0",
+    "python-multipart>=0.0.18",
 ]
 
 [project.scripts]
