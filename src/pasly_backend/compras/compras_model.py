@@ -38,4 +38,17 @@ class Compra(Base):
         nullable=False
     )
 
-    ticket = relationship("Ticket")
+    evento = relationship(
+        "Eventos",
+        back_populates="funciones"
+    )
+
+    ticket = relationship(
+        "Ticket",
+        back_populates="funciones"
+    )
+
+    estado: Mapped[str] = mapped_column(
+        String(50),
+        nullable=False
+    )
