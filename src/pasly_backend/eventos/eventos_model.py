@@ -38,6 +38,12 @@ class Eventos(Base):
         nullable=False
     )
 
+    moneda: Mapped[str] = mapped_column(
+        String(3),
+        nullable=False,
+        default="ARS"
+    )
+
     estado: Mapped[str] = mapped_column(
         String(50),
         nullable=False

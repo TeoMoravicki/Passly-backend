@@ -1,4 +1,4 @@
-from sqlalchemy import Date, Time, Integer, ForeignKey
+from sqlalchemy import Date, Time, Integer, ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from  pasly_backend.database.database import Base
@@ -20,6 +20,12 @@ class Compra(Base):
     monto: Mapped[int] = mapped_column(
         Integer,
         nullable=False
+    )
+
+    moneda: Mapped[str] = mapped_column(
+        String(3),
+        nullable=False,
+        default="ARS"
     )
 
     ticket_id: Mapped[int] = mapped_column(
