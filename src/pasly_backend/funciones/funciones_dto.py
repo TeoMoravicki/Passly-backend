@@ -4,17 +4,17 @@ from pydantic import BaseModel, ConfigDict
 
 class FuncionCreateDTO(BaseModel):
     evento_id: int
-    fecha: date
-    horario: time
-    capacidad_maxima: int
+    dia: date
+    hora: time
+    entradas_disponibles: int
+    estado: str
 
 
 class FuncionResponseDTO(BaseModel):
     id: int
     evento_id: int
-    fecha: date
-    horario: time
-    capacidad_maxima: int
+    dia: date
+    hora: time
     entradas_disponibles: int
     estado: str
 
