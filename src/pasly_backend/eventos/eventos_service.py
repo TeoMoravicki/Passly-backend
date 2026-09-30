@@ -17,6 +17,7 @@ class EventosService:
             capacidad_maxima=data.capacidad_maxima,
             lugar=data.lugar,
             precio_base=data.precio_base,
+            moneda=data.moneda,
             estado=data.estado,
             imagen=data.imagen,
         )
@@ -37,45 +38,29 @@ class EventosService:
 
 
     def get_events(self, db: Session):
-        return db.query(Eventos).all()
+        return db.get(Eventos)
 
-
-    def update_event(
-            self,
-            db: Session,
-            event_id: int,
-            data: EventUpdateDTO
+    def convertir_precio(
+        self,
+        db: Session,
+        event_id: int,
+        moneda: str
     ):
         evento = db.get(Eventos, event_id)
 
         if evento is None:
             return None
 
-        evento.nombre = data.nombre
-        evento.descripcion = data.descripcion
-        evento.capacidad_maxima = data.capacidad_maxima
-        evento.lugar = data.lugar
-        evento.precio_base = data.precio_base
-        evento.estado = data.estado
-        evento.imagen = data.imagen
+        tasas = {
+            "ARS": 1,
+            "USD": 1500,
+            "EUR": 1750
+        }
 
-        db.commit()
-        db.refresh(evento)
+        precio_convertido = evento.precio_base / tasas[moneda]
 
-        return evento
-
-
-    def delete_event(
-            self,
-            db: Session,
-            event_id: int
-    ):
-        evento = db.get(Eventos, event_id)
-
-        if evento is None:
-            return None
-
-        db.delete(evento)
-        db.commit()
-
-        return evento
+        return {
+            "precio_base_ars": evento.precio_base,
+            "moneda": moneda,
+            "precio_convertido": round(precio_convertido, 2)
+        }

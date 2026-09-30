@@ -22,6 +22,12 @@ class Compra(Base):
         nullable=False
     )
 
+    moneda: Mapped[str] = mapped_column(
+        String(3),
+        nullable=False,
+        default="ARS"
+    )
+
     ticket_id: Mapped[int] = mapped_column(
         ForeignKey("tickets.id"),
         nullable=False

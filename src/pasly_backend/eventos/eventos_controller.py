@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
+from typing import Literal
 
 from .eventos_dto import EventCreateDTO, EventUpdateDTO
 from .eventos_service import EventosService
@@ -24,25 +25,15 @@ def get_event_by_id(
 
 
 @router.post("/")
-def create_event(
-    data: EventCreateDTO,
-    db: Session = Depends(get_db)
-):
+def create_event( data: EventCreateDTO,
+    db: Session = Depends(get_db)):
     return service.create_event(db, data)
 
 
-@router.put("/{event_id}")
-def update_event(
+@router.get("/{event_id}/precio/{moneda}")
+def convertir_precio(
     event_id: int,
-    data: EventUpdateDTO,
+    moneda: Literal["ARS", "USD", "EUR"],
     db: Session = Depends(get_db)
 ):
-    return service.update_event(db, event_id, data)
-
-
-@router.delete("/{event_id}")
-def delete_event(
-    event_id: int,
-    db: Session = Depends(get_db)
-):
-    return service.delete_event(db, event_id)
+    return service.convertir_precio(db, event_id, moneda)
