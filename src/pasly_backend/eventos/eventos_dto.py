@@ -10,7 +10,14 @@ class EventCreateDTO(BaseModel):
     estado: str
     imagen: str
 
-
+class EventUpdateDTO(BaseModel):
+    nombre: str
+    descripcion: str
+    capacidad_maxima: int
+    lugar: str
+    precio_base: int
+    estado: str
+    imagen: str
 
 class EventResponseDTO(BaseModel):
     id: int
