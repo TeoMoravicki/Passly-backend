@@ -1,4 +1,4 @@
-from sqlalchemy import Date, Time, Integer, ForeignKey
+from sqlalchemy import Date, Time, Integer, ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from  pasly_backend.database.database import Base
@@ -40,4 +40,9 @@ class Compra(Base):
     ticket = relationship(
         "Ticket",
         back_populates="funciones"
+    )
+
+    estado: Mapped[str] = mapped_column(
+        String(50),
+        nullable=False
     )

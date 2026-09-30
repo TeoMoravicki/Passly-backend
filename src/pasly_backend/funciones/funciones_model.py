@@ -33,6 +33,6 @@ class Funcion(Base):
     )
 
     evento = relationship(
-        "Evento",
+        "Eventos",
         back_populates="funciones"
     )

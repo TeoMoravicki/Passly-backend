@@ -23,3 +23,20 @@ def get_compra_by_user_id(user_id: int,
 def create_compra( data: CompraCreateDTO,
     db: Session = Depends(get_db)):
     return service.create_compra(db, data)
+
+@router.get("/usuario/{usuario_id}")
+def get_historial(
+    usuario_id: int,
+    db: Session = Depends(get_db)
+):
+    return service.get_historial(db, usuario_id)
+
+@router.put("/{compra_id}/cancelar")
+def cancelar_compra(
+    compra_id: int,
+    db: Session = Depends(get_db)
+):
+    return service.cancelar_compra(
+        db,
+        compra_id
+    )

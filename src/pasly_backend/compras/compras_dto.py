@@ -16,6 +16,7 @@ class CompraResponseDTO(BaseModel):
     monto: int
     ticket_id: int
     funcion_id: int
+    estado: str
 
     model_config = {
         "from_attributes": True

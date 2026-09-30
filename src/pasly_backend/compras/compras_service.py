@@ -26,3 +26,30 @@ class ComprasService:
 
     ):
         return db.get(Compra, user_id)
+
+    def get_historial(self, db: Session, usuario_id: int):
+        return (
+            db.query(Compra)
+            .filter(Compra.usuario_id == usuario_id)
+            .all()
+        )
+
+    def cancelar_compra(
+            self,
+            db: Session,
+            compra_id: int
+    ):
+        compra = db.get(Compra, compra_id)
+
+        if compra is None:
+            return None
+
+        if compra.estado == "CANCELADA":
+            return compra
+
+        compra.estado = "CANCELADA"
+
+        db.commit()
+        db.refresh(compra)
+
+        return compra
