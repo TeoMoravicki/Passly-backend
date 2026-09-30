@@ -40,6 +40,6 @@ class Ticket(Base):
         nullable=False
     )
 
-    funcion = relationship("Funcion", back_populates="tickets")
-    usuario = relationship("Usuario", back_populates="tickets")
-    categoria = relationship("Categoria", back_populates="tickets")
+    funcion = relationship("Funcion")
+    usuario = relationship("User")
+    categoria = relationship("Categoria")

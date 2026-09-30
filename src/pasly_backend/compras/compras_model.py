@@ -32,12 +32,4 @@ class Compra(Base):
         nullable=False
     )
 
-    evento = relationship(
-        "Eventos",
-        back_populates="funciones"
-    )
-
-    ticket = relationship(
-        "Ticket",
-        back_populates="funciones"
-    )
+    ticket = relationship("Ticket")
