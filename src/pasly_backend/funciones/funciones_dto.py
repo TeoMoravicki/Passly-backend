@@ -1,13 +1,12 @@
+from sqlalchemy import String, Integer, Float, Date, Time
+from pydantic import BaseModel
 from datetime import date, time
-from pydantic import BaseModel, ConfigDict
-
 
 class FuncionCreateDTO(BaseModel):
     evento_id: int
     fecha: date
     horario: time
     capacidad_maxima: int
-
 
 class FuncionResponseDTO(BaseModel):
     id: int
