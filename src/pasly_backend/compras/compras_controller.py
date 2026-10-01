@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
-from .compras_dto import CompraCreateDTO
+from .compras_dto import CompraCreateDTO, CompraEstadoDTO
 from .compras_service import ComprasService
 from ..database.database import get_db
 
@@ -39,4 +39,16 @@ def cancelar_compra(
     return service.cancelar_compra(
         db,
         compra_id
+    )
+
+@router.put("/{compra_id}/estado")
+def update_estado(
+    compra_id: int,
+    data: CompraEstadoDTO,
+    db: Session = Depends(get_db)
+):
+    return service.update_estado(
+        db,
+        compra_id,
+        data
     )
