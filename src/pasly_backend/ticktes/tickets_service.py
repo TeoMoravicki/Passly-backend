@@ -1,4 +1,6 @@
 import uuid
+import qrcode
+import os
 
 from sqlalchemy.orm import Session
 
@@ -7,6 +9,18 @@ from pasly_backend.ticktes.tickets_model import Ticket
 
 def generar_identifier():
     return f"TICKET-{uuid.uuid4().hex[:8].upper()}"
+
+
+def generar_qr(identifier: str):
+    qr = qrcode.make(identifier)
+
+    carpeta = "src/pasly_backend/static/qr"
+    os.makedirs(carpeta, exist_ok=True)
+
+    ruta = os.path.join(carpeta, f"{identifier}.png")
+    qr.save(ruta)
+
+    return f"/static/qr/{identifier}.png"
 
 
 def get_all_tickets(db: Session):
@@ -25,8 +39,10 @@ def create_ticket(
 ):
     identifier = generar_identifier()
 
+    qr_url = generar_qr(identifier)
+
     new_ticket = Ticket(
-        qr=identifier,
+        qr=qr_url,
         estado="ACTIVO",
         funcion_id=funcion_id,
         usuario_id=user_id,
