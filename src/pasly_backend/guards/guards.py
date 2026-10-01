@@ -5,17 +5,14 @@ import jwt
 from ..database.database import get_db
 from ..usuarios.usuarios_model import User
 from ..usuarios.usuarios_service import UserService
-from .security import decode_access_token
+from .security import decode_access_token, token_esta_revocado
 
 service = UserService()
 
 # tokenUrl es el endpoint que emite el token
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="users/token")
 
-def obtener_usuario_autenticado(
-    token: str = Depends(oauth2_scheme),
-    db: Session = Depends(get_db),
-) -> User:
+def obtener_usuario_autenticado(token: str = Depends(oauth2_scheme),db: Session = Depends(get_db)) -> User:
     credenciales_invalidas = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="No se pudo validar el token",
@@ -27,11 +24,18 @@ def obtener_usuario_autenticado(
     except jwt.ExpiredSignatureError:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="El token expiro, vuelva a iniciar sesion",
+            detail="El token expiro, volve a iniciar sesion",
             headers={"WWW-Authenticate": "Bearer"},
         )
     except jwt.InvalidTokenError:
         raise credenciales_invalidas
+
+    if token_esta_revocado(token):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="La sesion fue cerrada, vuelva a iniciar sesion",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
 
     user_id = payload.get("sub")
     if user_id is None:

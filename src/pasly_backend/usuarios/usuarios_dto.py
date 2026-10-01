@@ -44,3 +44,14 @@ class Token(BaseModel):
 
 class AsignarRolRequest(BaseModel):
     rol: str
+
+class ForgotPasswordRequest(BaseModel):
+    email: EmailStr
+
+class ForgotPasswordResponse(BaseModel):
+    detail: str
+    reset_token: str | None = None
+
+class ResetPasswordRequest(BaseModel):
+    token: str
+    new_password: str
