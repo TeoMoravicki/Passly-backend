@@ -21,3 +21,6 @@ class CompraResponseDTO(BaseModel):
     model_config = {
         "from_attributes": True
     }
+
+class CompraEstadoDTO(BaseModel):
+    estado: str

@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 
-from pasly_backend.compras.compras_dto import CompraCreateDTO
+from pasly_backend.compras.compras_dto import CompraCreateDTO, CompraEstadoDTO
 from pasly_backend.compras.compras_model import Compra
 from pasly_backend.ticktes.tickets_model import Ticket
 
@@ -57,3 +57,21 @@ class ComprasService:
         return db.query(Compra).filter(
             Compra.usuario_id == user_id
         ).all()
+
+    def update_estado(
+            self,
+            db: Session,
+            compra_id: int,
+            data: CompraEstadoDTO
+    ):
+        compra = db.get(Compra, compra_id)
+
+        if compra is None:
+            return None
+
+        compra.estado = data.estado
+
+        db.commit()
+        db.refresh(compra)
+
+        return compra
