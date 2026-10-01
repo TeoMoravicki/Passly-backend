@@ -75,3 +75,10 @@ class ComprasService:
         db.refresh(compra)
 
         return compra
+
+    def get_historial(self, db: Session, usuario_id: int):
+        return (
+            db.query(Compra)
+            .filter(Compra.usuario_id == usuario_id)
+            .all()
+        )
