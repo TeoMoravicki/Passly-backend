@@ -1,17 +1,20 @@
 import os
+
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from pasly_backend.eventos.eventos_dto import EventCreateDTO, EventUpdateDTO
-from pasly_backend.eventos.eventos_model import Eventos
+from pasly_backend.eventos.eventos_model import Evento
 
 os.makedirs("static", exist_ok=True)
+from ..database.database import get_db
 
 
 class EventosService:
 
     # CREATE
     def create_event(self, db: Session, data: EventCreateDTO):
-        evento = Eventos(
+        evento = Evento(
             nombre=data.nombre,
             descripcion=data.descripcion,
             capacidad_maxima=data.capacidad_maxima,
@@ -34,11 +37,11 @@ class EventosService:
             db: Session,
             event_id: int
     ):
-        return db.get(Eventos, event_id)
+        return db.get(Evento, event_id)
 
 
     def get_events(self, db: Session):
-        return db.get(Eventos)
+        return db.scalars(select(Evento)).all()
 
     def convertir_precio(
         self,
@@ -46,7 +49,7 @@ class EventosService:
         event_id: int,
         moneda: str
     ):
-        evento = db.get(Eventos, event_id)
+        evento = db.get(Evento, event_id)
 
         if evento is None:
             return None

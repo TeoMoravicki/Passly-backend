@@ -4,7 +4,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from  pasly_backend.database.database import Base
 
 
-class Eventos(Base):
+class Evento(Base):
     __tablename__ = "eventos"
 
     id: Mapped[int] = mapped_column(

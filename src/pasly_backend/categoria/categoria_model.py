@@ -26,3 +26,5 @@ class Categoria(Base):
         String(100),
         nullable=False
     )
+
+    ticket = relationship("Ticket", back_populates="categoria")
