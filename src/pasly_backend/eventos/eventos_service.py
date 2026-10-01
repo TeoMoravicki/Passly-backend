@@ -68,9 +68,3 @@ class EventosService:
             "precio_convertido": round(precio_convertido, 2)
         }
 
-        def get_historial(self, db: Session, usuario_id: int):
-            return (
-                db.query(Compra)
-                .filter(Compra.usuario_id == usuario_id)
-                .all()
-            )
