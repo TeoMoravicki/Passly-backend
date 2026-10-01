@@ -9,7 +9,7 @@ def _timestamp() -> str:
 
 class User(Base):
     __tablename__ = "usuarios"
-    __table_args__ = (CheckConstraint("role IN ('usuario', 'administrador')", name="ck_usuarios_role"))
+   # __table_args__ = (CheckConstraint("role IN ('usuario', 'administrador')", name="ck_usuarios_role"))
     
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     name: Mapped[str] = mapped_column(String(150), nullable=False)
