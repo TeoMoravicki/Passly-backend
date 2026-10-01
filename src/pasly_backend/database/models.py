@@ -1,12 +1,20 @@
-from .database import Base, engine
-
-from pasly_backend.categoria.categoria_model import Categoria  
-from pasly_backend.compras.compras_model import Compra 
-from pasly_backend.eventos.eventos_model import Eventos
-from pasly_backend.funciones.funciones_model import Funcion
-from pasly_backend.ticktes.tickets_model import Ticket
-from pasly_backend.usuarios.usuarios_model import AsignacionRol, User
+from .database import get_connection
 
 
 def create_tables():
-    Base.metadata.create_all(bind=engine)
+    connection = get_connection()
+
+    connection.execute("""
+        CREATE TABLE IF NOT EXISTS users (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            email TEXT NOT NULL UNIQUE,
+            password_hash TEXT NOT NULL,
+            birth_date TEXT NOT NULL,
+            role TEXT NOT NULL CHECK (role IN ('usuario', 'administrador')),
+            created_at TEXT NOT NULL DEFAULT (datetime('now'))
+        )
+    """)
+
+    connection.commit()
+    connection.close()

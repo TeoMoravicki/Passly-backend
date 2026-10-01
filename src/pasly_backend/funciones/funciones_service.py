@@ -1,35 +1,87 @@
-from sqlalchemy.orm import Session
+import threading
 
-from pasly_backend.funciones.funciones_dto import FuncionCreateDTO
-from pasly_backend.funciones.funciones_model import Funcion
+funciones = []
+funcion_id_counter = 1
 
+lock = threading.Lock()
 
-class FuncionesService:
+def get_all_funciones():
+    return funciones
 
-    def create_funcion(self, db: Session, data: FuncionCreateDTO):
-        funcion = Funcion(
-            evento_id=data.evento_id,
-            dia=data.dia,
-            hora=data.hora,
-            entradas_disponibles=data.entradas_disponibles,
-            estado=data.estado
-        )
+def get_funcion(funcion_id: int):
+    for funcion in funciones:
+        if funcion["id"] == funcion_id:
+            return funcion
+    return None
 
-        db.add(funcion)
-        db.commit()
-        db.refresh(funcion)
+def get_funciones_by_evento(evento_id: int):
+    resultado = []
 
-        return funcion
+    for funcion in funciones:
+        if funcion["evento_id"] == evento_id:
+            resultado.append(funcion)
+    return resultado
 
-    def get_funciones(self, db: Session):
-        return db.query(Funcion).all()
+def create_funcion(evento_id: int, fecha: str, horario: str, capacidad_maxima: int):
+    global funcion_id_counter
 
-    def get_funcion_by_id(self, db: Session, funcion_id: int):
-        return db.get(Funcion, funcion_id)
+    if capacidad_maxima <= 0:
+        return {
+            "error": "La capacidad máxima debe ser mayor a 0"
+        }
 
-    def get_funciones_by_evento_id(self, db: Session, evento_id: int):
-        return (
-            db.query(Funcion)
-            .filter(Funcion.evento_id == evento_id)
-            .all()
-        )
+    new_funcion = {
+        "id": funcion_id_counter,
+        "evento_id": evento_id,
+        "fecha": fecha,
+        "horario": horario,
+        "capacidad_maxima": capacidad_maxima,
+        "entradas_disponibles": capacidad_maxima,
+        "estado": "ACTIVA"
+    }
+
+    funciones.append(new_funcion)
+    funcion_id_counter += 1
+    return new_funcion
+
+def update_entradas_disponibles(funcion_id: int, cantidad: int):
+    with lock:
+        funcion = get_funcion(funcion_id)
+
+        if not funcion:
+            return {
+                "error": "Función no encontrada"
+            }
+
+        if cantidad <= 0:
+            return {
+                "error": "La cantidad debe ser mayor a 0"
+            }
+
+        if funcion["entradas_disponibles"] < cantidad:
+            return {
+                "error": "No hay suficientes entradas disponibles"
+            }
+
+        funcion["entradas_disponibles"] -= cantidad
+        return {
+            "success": True,
+            "entradas_compradas": cantidad,
+            "entradas_restantes": funcion["entradas_disponibles"]
+        }
+
+def update_funcion_estado(funcion_id: int, nuevo_estado: str):
+    estados_validos = [
+        "ACTIVA",
+        "CANCELADA",
+        "FINALIZADA"
+    ]
+    if nuevo_estado.upper() not in estados_validos:
+        return {
+            "error": "Estado de función no válido"
+        }
+    for funcion in funciones:
+        if funcion["id"] == funcion_id:
+            funcion["estado"] = nuevo_estado.upper()
+            return funcion
+    return None
