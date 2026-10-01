@@ -37,7 +37,8 @@ class ComprasService:
             monto=round(monto_convertido, 2),
             moneda=data.moneda,
             ticket_id=data.ticket_id,
-            usuario_id=data.usuario_id
+            usuario_id=data.usuario_id,
+            estado=data.estado
         )
 
         db.add(compra)

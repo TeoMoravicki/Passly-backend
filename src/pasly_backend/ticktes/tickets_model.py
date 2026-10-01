@@ -23,11 +23,6 @@ class Ticket(Base):
         nullable=False
     )
 
-    compra_id: Mapped[int] = mapped_column(
-        ForeignKey("compras.id"),
-        nullable=False
-    )
-
     funcion_id: Mapped[int] = mapped_column(
         ForeignKey("funciones.id"),
         nullable=False

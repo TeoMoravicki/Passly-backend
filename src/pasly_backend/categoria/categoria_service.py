@@ -10,6 +10,7 @@ os.makedirs("static", exist_ok=True)
 class CategoriaService:
     def create_categoria(self, db: Session, data: CategoriaCreateDTO):
         categoria = Categoria(
+            nombre=data.nombre,
             precio=data.precio,
             lugar=data.lugar,
         )

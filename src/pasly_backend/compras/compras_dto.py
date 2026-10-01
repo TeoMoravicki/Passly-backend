@@ -8,6 +8,7 @@ class CompraCreateDTO(BaseModel):
     moneda: Literal["ARS", "USD", "EUR"] = "ARS"
     ticket_id: int
     usuario_id: int
+    estado: str = "PENDIENTE"
 
 
 class CompraResponseDTO(BaseModel):

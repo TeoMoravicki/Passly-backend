@@ -29,6 +29,11 @@ class Compra(Base):
         default="ARS"
     )
 
+    ticket_id: Mapped[int] = mapped_column(
+        ForeignKey("tickets.id"),
+        nullable=False
+    )
+
     usuario_id: Mapped[int] = mapped_column(
         ForeignKey("usuarios.id"),
         nullable=False
