@@ -31,7 +31,7 @@ def get_historial(
 ):
     return service.get_historial(db, usuario_id)
 
-@router.put("/{compra_id}/cancelar")
+'''@router.put("/{compra_id}/cancelar")
 def cancelar_compra(
     compra_id: int,
     db: Session = Depends(get_db)
@@ -40,7 +40,7 @@ def cancelar_compra(
         db,
         compra_id
     )
-
+'''
 @router.put("/{compra_id}/estado")
 def update_estado(
     compra_id: int,
