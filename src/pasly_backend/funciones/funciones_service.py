@@ -1,3 +1,4 @@
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from pasly_backend.funciones.funciones_dto import FuncionCreateDTO
@@ -22,7 +23,7 @@ class FuncionesService:
         return funcion
 
     def get_funciones(self, db: Session):
-        return db.query(Funcion).all()
+        return db.scalars(select(Funcion)).all()
 
     def get_funcion_by_id(self, db: Session, funcion_id: int):
         return db.get(Funcion, funcion_id)

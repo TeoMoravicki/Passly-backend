@@ -4,7 +4,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from  pasly_backend.database.database import Base
 
 
-class Eventos(Base):
+class Evento(Base):
     __tablename__ = "eventos"
 
     id: Mapped[int] = mapped_column(
@@ -36,6 +36,12 @@ class Eventos(Base):
     precio_base: Mapped[int] = mapped_column(
         Integer,
         nullable=False
+    )
+
+    moneda: Mapped[str] = mapped_column(
+        String(3),
+        nullable=False,
+        default="ARS"
     )
 
     estado: Mapped[str] = mapped_column(

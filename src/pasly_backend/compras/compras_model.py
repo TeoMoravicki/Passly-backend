@@ -1,7 +1,8 @@
-from sqlalchemy import Date, Time, Integer, ForeignKey
+from datetime import date
+from sqlalchemy import Date, Integer, String, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from  pasly_backend.database.database import Base
+from pasly_backend.database.database import Base
 
 
 class Compra(Base):
@@ -12,7 +13,7 @@ class Compra(Base):
         autoincrement=True
     )
 
-    fecha: Mapped[Date] = mapped_column(
+    fecha: Mapped[date] = mapped_column(
         Date,
         nullable=False
     )
@@ -22,9 +23,10 @@ class Compra(Base):
         nullable=False
     )
 
-    ticket_id: Mapped[int] = mapped_column(
-        ForeignKey("tickets.id"),
-        nullable=False
+    moneda: Mapped[str] = mapped_column(
+        String(3),
+        nullable=False,
+        default="ARS"
     )
 
     usuario_id: Mapped[int] = mapped_column(
@@ -32,4 +34,17 @@ class Compra(Base):
         nullable=False
     )
 
-    ticket = relationship("Ticket")
+    estado: Mapped[str] = mapped_column(
+        String(50),
+        nullable=False
+    )
+
+    tickets = relationship(
+        "Ticket",
+        back_populates="compra"
+    )
+
+    usuario = relationship(
+        "User",
+        back_populates="compras"
+    )

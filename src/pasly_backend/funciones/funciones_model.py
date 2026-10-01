@@ -1,3 +1,5 @@
+from datetime import date, time
+
 from sqlalchemy import String, Date, Time, Integer, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -17,12 +19,12 @@ class Funcion(Base):
         nullable=False
     )
 
-    hora: Mapped[Time] = mapped_column(
+    hora: Mapped[time] = mapped_column(
         Time,
         nullable=False
     )
 
-    dia: Mapped[Date] = mapped_column(
+    dia: Mapped[date] = mapped_column(
         Date,
         nullable=False
     )
@@ -38,6 +40,11 @@ class Funcion(Base):
     )
 
     evento = relationship(
-        "Eventos",
+        "Evento",
         back_populates="funciones"
+    )
+
+    tickets = relationship(
+        "Ticket",
+        back_populates="funcion"
     )

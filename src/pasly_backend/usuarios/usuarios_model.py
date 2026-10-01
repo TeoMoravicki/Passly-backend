@@ -23,7 +23,15 @@ class User(Base):
         back_populates="usuario",
         order_by="AsignacionRol.id",
     )
+    compras = relationship(
+        "Compra",
+        back_populates="usuario"
+    )
 
+    tickets = relationship(
+        "Ticket",
+        back_populates="usuario"
+    )
 
 class AsignacionRol(Base):
     __tablename__ = "asignaciones_rol"

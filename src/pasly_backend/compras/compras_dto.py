@@ -1,23 +1,26 @@
 from datetime import date
-
-from sqlalchemy import String, Integer, Float, Date, Time
 from pydantic import BaseModel
+from typing import Literal
 
-from datetime import date
 
 class CompraCreateDTO(BaseModel):
     fecha: date
-    monto: int
+    moneda: Literal["ARS", "USD", "EUR"] = "ARS"
     ticket_id: int
+    usuario_id: int
 
 
 class CompraResponseDTO(BaseModel):
     id: int
     fecha: date
     monto: int
+    moneda: str
     ticket_id: int
-    funcion_id: int
+    usuario_id: int
 
     model_config = {
         "from_attributes": True
     }
+
+class CompraEstadoDTO(BaseModel):
+    estado: str

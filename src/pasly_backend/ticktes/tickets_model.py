@@ -1,5 +1,3 @@
-# models/ticket_model.py
-
 from sqlalchemy import String, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -25,6 +23,11 @@ class Ticket(Base):
         nullable=False
     )
 
+    compra_id: Mapped[int] = mapped_column(
+        ForeignKey("compras.id"),
+        nullable=False
+    )
+
     funcion_id: Mapped[int] = mapped_column(
         ForeignKey("funciones.id"),
         nullable=False
@@ -40,6 +43,22 @@ class Ticket(Base):
         nullable=False
     )
 
-    funcion = relationship("Funcion")
-    usuario = relationship("User")
-    categoria = relationship("Categoria")
+    funcion = relationship(
+        "Funcion",
+        back_populates="tickets"
+    )
+
+    usuario = relationship(
+        "User",
+        back_populates="tickets"
+    )
+
+    categoria = relationship(
+        "Categoria",
+        back_populates="ticket"
+    )
+
+    compra = relationship(
+        "Compra",
+        back_populates="tickets"
+    )
