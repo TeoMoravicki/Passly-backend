@@ -17,6 +17,7 @@ dependencies = [
     "sqlalchemy>=2.0.52",
     "pyjwt>=2.9.0",
     "python-multipart>=0.0.18",
+    "redis>=5.0.0",
 ]
 
 [project.scripts]

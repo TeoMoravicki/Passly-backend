@@ -1,12 +1,15 @@
+import secrets
 from fastapi import HTTPException, status
 from passlib.context import CryptContext
 from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
+from ..guards.redis_client import get_redis
 from .usuarios_model import AsignacionRol, User
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 ROLES_VALIDOS = ("usuario", "administrador")
+PASSWORD_RESET_TTL_SECONDS = 15 * 60
 
 
 class UserService:
@@ -37,10 +40,6 @@ class UserService:
         if usuario is None:
             raise HTTPException(status_code=404, detail="Usuario no encontrado")
 
-        # El rol vigente es el calculado (asignaciones_rol), no el fijo de la
-        # columna role. Se desprende el objeto de la sesion despues de pisarlo
-        # en memoria para que ese valor "de exhibicion" nunca se llegue a
-        # persistir por accidente en un commit posterior.
         usuario.role = self.obtener_rol_actual(db, user_id)
         db.expunge(usuario)
         return usuario
@@ -92,3 +91,30 @@ class UserService:
         db.commit()
 
         return self.get_user(db, user_id)
+
+    def solicitar_reset_password(self, db: Session, email: str) -> str | None:
+        usuario = db.scalar(select(User).where(User.email == email))
+        if usuario is None:
+            return None
+        
+        token = secrets.token_urlsafe(32)
+        get_redis().setex(
+            f"pwd_reset:{token}", PASSWORD_RESET_TTL_SECONDS, str(usuario.id)
+        )
+        return token
+
+    def resetear_password(self, db: Session, token: str, nueva_password: str) -> None:
+
+        user_id = get_redis().getdel(f"pwd_reset:{token}")
+        if user_id is None:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="El token de recuperacion es invalido o ya expiro",
+            )
+
+        usuario = db.get(User, int(user_id))
+        if usuario is None:
+            raise HTTPException(status_code=404, detail="Usuario no encontrado")
+
+        usuario.password_hash = pwd_context.hash(nueva_password)
+        db.commit()
