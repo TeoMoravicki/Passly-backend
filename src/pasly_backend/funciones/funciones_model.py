@@ -1,7 +1,7 @@
-from sqlalchemy import Date, Time, Integer, ForeignKey
+from sqlalchemy import String, Date, Time, Integer, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from  pasly_backend.database.database import Base
+from pasly_backend.database.database import Base
 
 
 class Funcion(Base):
@@ -12,23 +12,28 @@ class Funcion(Base):
         autoincrement=True
     )
 
-    fecha: Mapped[Date] = mapped_column(
-        Date,
+    evento_id: Mapped[int] = mapped_column(
+        ForeignKey("eventos.id"),
         nullable=False
     )
 
-    horario: Mapped[Time] = mapped_column(
+    hora: Mapped[Time] = mapped_column(
         Time,
         nullable=False
     )
 
-    capacidad_maxima: Mapped[int] = mapped_column(
+    dia: Mapped[Date] = mapped_column(
+        Date,
+        nullable=False
+    )
+
+    entradas_disponibles: Mapped[int] = mapped_column(
         Integer,
         nullable=False
     )
 
-    evento_id: Mapped[int] = mapped_column(
-        ForeignKey("eventos.id"),
+    estado: Mapped[str] = mapped_column(
+        String(50),
         nullable=False
     )
 

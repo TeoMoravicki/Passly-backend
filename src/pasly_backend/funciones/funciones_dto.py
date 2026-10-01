@@ -17,6 +17,4 @@ class FuncionResponseDTO(BaseModel):
     entradas_disponibles: int
     estado: str
 
-    model_config = {
-        "from_attributes": True
-    }
+    model_config = ConfigDict(from_attributes=True)

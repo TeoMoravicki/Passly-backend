@@ -8,6 +8,8 @@ class EventCreateDTO(BaseModel):
     lugar: str
     precio_base: int
     estado: str
+    imagen: str
+
 
 
 class EventResponseDTO(BaseModel):

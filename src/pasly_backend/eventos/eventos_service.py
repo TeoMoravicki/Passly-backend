@@ -10,14 +10,12 @@ class EventosService:
     def create_event(self, db: Session, data: EventCreateDTO):
         evento = Eventos(
             nombre=data.nombre,
-            horario=data.horario,
-            entradas_disponibles=data.entradas_disponibles,
             descripcion=data.descripcion,
+            capacidad_maxima=data.capacidad_maxima,
             lugar=data.lugar,
-            fecha=data.fecha,
-            precio=data.precio,
-            categoria_id=data.categoria_id,
-            estado=data.estado
+            precio_base=data.precio_base,
+            estado=data.estado,
+            imagen=data.imagen,
         )
 
         db.add(evento)
