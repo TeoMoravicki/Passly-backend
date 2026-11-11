@@ -561,6 +561,7 @@ dependencies = [
     { name = "pydantic-core" },
     { name = "pyjwt" },
     { name = "python-multipart" },
+    { name = "python3-pika" },
     { name = "qrcode", extra = ["pil"] },
     { name = "redis" },
     { name = "schemas" },
@@ -577,6 +578,7 @@ requires-dist = [
     { name = "pydantic-core", specifier = ">=2.46.5" },
     { name = "pyjwt", specifier = ">=2.9.0" },
     { name = "python-multipart", specifier = ">=0.0.18" },
+    { name = "python3-pika", specifier = ">=0.9.14" },
     { name = "qrcode", extras = ["pil"], specifier = ">=8.2" },
     { name = "redis", specifier = ">=5.0.0" },
     { name = "schemas", specifier = ">=0.7.1" },
@@ -810,6 +812,12 @@ sdist = { url = "https://files.pythonhosted.org/packages/5b/42/55c32bb9b12693c09
 wheels = [
     { url = "https://files.pythonhosted.org/packages/e1/04/e8135ebd1ad02c56ec633277529b2602ff99ff634be76cdba5744cf554fd/python_multipart-0.0.32-py3-none-any.whl", hash = "sha256:ff6d3f776f16878c894e52e107296ffc890e913c611b1a4ec6c44e2821fe2e23", size = 30042, upload-time = "2026-06-04T16:18:57.319Z" },
 ]
+
+[[package]]
+name = "python3-pika"
+version = "0.9.14"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/1a/0f/70233fa4ce5df4b6451a94043bfdb6a8e524a85b53a0c861fc8e46cb6115/python3-pika-0.9.14.tar.gz", hash = "sha256:073267c932671cfbcc62d772eba511e77bae80e32a22a424dd9300bbb98b70b0", size = 68752, upload-time = "2014-09-23T13:13:00.4Z" }
 
 [[package]]
 name = "pyyaml"

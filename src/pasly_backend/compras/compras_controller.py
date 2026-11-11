@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
-from .compras_dto import CompraCreateDTO, CompraEstadoDTO
+from .compras_dto import CompraCreateDTO, CompraEstadoDTO, ReservaCreateDTO
 from .compras_service import ComprasService
 from ..database.database import get_db
 
@@ -14,10 +14,12 @@ def get_compras(db: Session = Depends(get_db)):
     return service.get_compras(db)
 
 
-@router.get("/{user_id}")
-def get_compra_by_user_id(user_id: int,
-                db: Session = Depends(get_db)):
-    return service.get_compra_by_user_id(db, user_id)
+@router.get("/{compra_id}")
+def get_compra_by_id(
+    compra_id: int,
+    db: Session = Depends(get_db)
+):
+    return service.get_compra_by_id(db, compra_id)
 
 @router.post("/")
 def create_compra( data: CompraCreateDTO,
@@ -51,4 +53,24 @@ def update_estado(
         db,
         compra_id,
         data
+    )
+
+@router.post("/reservar")
+def reservar_entradas(
+    data: ReservaCreateDTO,
+    db: Session = Depends(get_db)
+):
+    return service.reservar_entradas(
+        db,
+        data
+    )
+
+@router.put("/reserva/{reserva_id}/confirmar")
+def confirmar_reserva(
+    reserva_id: str,
+    db: Session = Depends(get_db)
+):
+    return service.confirmar_reserva(
+        db,
+        reserva_id
     )

@@ -25,3 +25,9 @@ class CompraResponseDTO(BaseModel):
 
 class CompraEstadoDTO(BaseModel):
     estado: str
+
+
+class ReservaCreateDTO(BaseModel):
+    usuario_id: int
+    funcion_id: int
+    cantidad: int
