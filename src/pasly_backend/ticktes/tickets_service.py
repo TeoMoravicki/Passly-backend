@@ -14,10 +14,18 @@ def generar_identifier():
 def generar_qr(identifier: str):
     qr = qrcode.make(identifier)
 
-    carpeta = "src/pasly_backend/static/qr"
+    carpeta = os.getenv(
+        "QR_DIR",
+        "src/pasly_backend/static/qr"
+    )
+
     os.makedirs(carpeta, exist_ok=True)
 
-    ruta = os.path.join(carpeta, f"{identifier}.png")
+    ruta = os.path.join(
+        carpeta,
+        f"{identifier}.png"
+    )
+
     qr.save(ruta)
 
     return f"/static/qr/{identifier}.png"
@@ -42,6 +50,7 @@ def create_ticket(
     qr_url = generar_qr(identifier)
 
     new_ticket = Ticket(
+        identifier=identifier,
         qr=qr_url,
         estado="ACTIVO",
         funcion_id=funcion_id,
@@ -61,7 +70,11 @@ def update_ticket_estado(
     ticket_id: int,
     nuevo_estado: str
 ):
-    estados_validos = ["ACTIVO", "USADO", "CANCELADO"]
+    estados_validos = [
+        "ACTIVO",
+        "USADO",
+        "CANCELADO"
+    ]
 
     if nuevo_estado.upper() not in estados_validos:
         return {"error": "Estado de ticket no válido"}

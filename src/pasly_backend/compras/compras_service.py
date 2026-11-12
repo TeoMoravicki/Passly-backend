@@ -1,5 +1,8 @@
 import json
 import uuid
+import os
+from decimal import Decimal
+
 from sqlalchemy.orm import Session
 
 from pasly_backend.redis_config.redis_client import redis_client
@@ -9,6 +12,7 @@ from pasly_backend.ticktes.tickets_model import Ticket
 from pasly_backend.funciones.funciones_model import Funcion
 from pasly_backend.rabbitmq.rabbitmq_client import publicar_compra_confirmada
 
+
 class ComprasService:
 
     def create_compra(
@@ -16,37 +20,31 @@ class ComprasService:
         db: Session,
         data: CompraCreateDTO
     ):
-        # Buscar el ticket
         ticket = db.get(Ticket, data.ticket_id)
 
         if ticket is None:
             return None
 
-
-        print("TICKET:", ticket.id)
-        print("FUNCION:", ticket.funcion)
-        print("EVENTO:", ticket.funcion.evento)
-
         precio_base = ticket.funcion.evento.precio_base
 
-
-
         tasas = {
-            "ARS": 1,
-            "USD": 1500,
-            "EUR": 1750
+            "ARS": Decimal(os.getenv("TASA_ARS", "1")),
+            "USD": Decimal(os.getenv("TASA_USD", "1500")),
+            "EUR": Decimal(os.getenv("TASA_EUR", "1750"))
         }
 
-        # Convertir el precio
-        monto_convertido = precio_base / tasas[data.moneda]
+        tasa_utilizada = tasas[data.moneda]
+
+        monto_convertido = Decimal(str(precio_base)) / tasa_utilizada
 
         compra = Compra(
             fecha=data.fecha,
-            monto=round(monto_convertido, 2),
+            monto=monto_convertido.quantize(Decimal("0.01")),
             moneda=data.moneda,
+            tasa_utilizada=tasa_utilizada,
             ticket_id=data.ticket_id,
             usuario_id=data.usuario_id,
-            estado=data.estado
+            estado="CONFIRMADA"
         )
 
         db.add(compra)
@@ -59,17 +57,17 @@ class ComprasService:
         return db.query(Compra).all()
 
     def get_compra_by_id(
-            self,
-            db: Session,
-            compra_id: int
+        self,
+        db: Session,
+        compra_id: int
     ):
         return db.get(Compra, compra_id)
 
     def update_estado(
-            self,
-            db: Session,
-            compra_id: int,
-            data: CompraEstadoDTO
+        self,
+        db: Session,
+        compra_id: int,
+        data: CompraEstadoDTO
     ):
         compra = db.get(Compra, compra_id)
 
@@ -88,13 +86,17 @@ class ComprasService:
                 "compra_id": compra.id,
                 "usuario_id": compra.usuario_id,
                 "ticket_id": compra.ticket_id,
-                "monto": compra.monto,
+                "monto": str(compra.monto),
                 "estado": compra.estado
             })
 
         return compra
 
-    def get_historial(self, db: Session, usuario_id: int):
+    def get_historial(
+        self,
+        db: Session,
+        usuario_id: int
+    ):
         return (
             db.query(Compra)
             .filter(Compra.usuario_id == usuario_id)
@@ -102,9 +104,9 @@ class ComprasService:
         )
 
     def reservar_entradas(
-            self,
-            db: Session,
-            data
+        self,
+        db: Session,
+        data
     ):
         if data.cantidad <= 0:
             return {"error": "La cantidad debe ser mayor a cero"}
@@ -147,9 +149,9 @@ class ComprasService:
         }
 
     def confirmar_reserva(
-            self,
-            db: Session,
-            reserva_id: str
+        self,
+        db: Session,
+        reserva_id: str
     ):
         clave = f"reserva:{reserva_id}"
 

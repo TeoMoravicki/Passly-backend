@@ -1,5 +1,7 @@
 from datetime import date
-from sqlalchemy import Date, Integer, String, ForeignKey
+from decimal import Decimal
+
+from sqlalchemy import String, ForeignKey, Date, Numeric
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from pasly_backend.database.database import Base
@@ -18,8 +20,8 @@ class Compra(Base):
         nullable=False
     )
 
-    monto: Mapped[int] = mapped_column(
-        Integer,
+    monto: Mapped[Decimal] = mapped_column(
+        Numeric(12, 2),
         nullable=False
     )
 
@@ -27,6 +29,11 @@ class Compra(Base):
         String(3),
         nullable=False,
         default="ARS"
+    )
+
+    tasa_utilizada: Mapped[Decimal] = mapped_column(
+        Numeric(12, 2),
+        nullable=False
     )
 
     ticket_id: Mapped[int] = mapped_column(
@@ -44,7 +51,7 @@ class Compra(Base):
         nullable=False
     )
 
-    tickets = relationship(
+    ticket = relationship(
         "Ticket",
         back_populates="compra"
     )
