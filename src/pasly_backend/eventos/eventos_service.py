@@ -39,9 +39,8 @@ class EventosService:
     ):
         return db.get(Evento, event_id)
 
-
     def get_events(self, db: Session):
-        return db.scalars(select(Evento)).all()
+        return db.query(Evento).all()
 
     def convertir_precio(
         self,
@@ -67,3 +66,4 @@ class EventosService:
             "moneda": moneda,
             "precio_convertido": round(precio_convertido, 2)
         }
+
