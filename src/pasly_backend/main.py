@@ -1,3 +1,5 @@
+import logging
+
 from fastapi import FastAPI
 from .database.models import create_tables
 from .eventos.eventos_controller import router as eventos_router
@@ -6,6 +8,9 @@ from .eventos.compras_controller import router as compras_router
 from .ticktes.tickets_controller import router as tickets_router
 from .funciones.funciones_controller import router as funciones_router
 from .usuarios.usuarios_controller import router as usuarios_router
+from .categoria.categoria_controller import router as categoria_router
+
+logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
 
 app = FastAPI()
 app.include_router(eventos_router)
@@ -14,6 +19,7 @@ app.include_router(compras_router)
 app.include_router(tickets_router)
 app.include_router(funciones_router)
 app.include_router(usuarios_router)
+app.include_router(categoria_router)
 
 create_tables()
 
