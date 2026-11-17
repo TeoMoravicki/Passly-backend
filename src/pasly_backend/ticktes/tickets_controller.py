@@ -1,47 +1,44 @@
-from fastapi import APIRouter, HTTPException, Depends
-from sqlalchemy.orm import Session
-
-from .tickets_dto import TicketCreateDTO
+from fastapi import APIRouter, HTTPException
+from .tickets_module import TicketCreate
 from .tickets_service import (
     get_all_tickets,
     get_ticket,
-    create_ticket
+    create_ticket,
+    get_tickets_by_compra
 )
-from ..database.database import get_db
-
 
 router = APIRouter(prefix="/tickets", tags=["Tickets"])
 
-
 @router.get("/")
-def get_tickets(db: Session = Depends(get_db)):
-    return get_all_tickets(db)
+def get_tickets():
+    return get_all_tickets()
 
+@router.get("/compra/{compra_id}")
+def get_tickets_by_compra_id(compra_id: int):
+    tickets = get_tickets_by_compra(compra_id)
+
+    if not tickets:
+        raise HTTPException(
+            status_code=404,
+            detail="No hay tickets para esta compra"
+        )
+    return tickets
 
 @router.get("/{ticket_id}")
-def get_ticket_by_id(
-    ticket_id: int,
-    db: Session = Depends(get_db)
-):
-    ticket = get_ticket(db, ticket_id)
+def get_ticket_by_id(ticket_id: int):
+    ticket = get_ticket(ticket_id)
 
-    if ticket is None:
+    if not ticket:
         raise HTTPException(
             status_code=404,
             detail="Ticket no encontrado"
         )
-
     return ticket
 
-
 @router.post("/")
-def create_new_ticket(
-    ticket: TicketCreateDTO,
-    db: Session = Depends(get_db)
-):
+def create_new_ticket(ticket: TicketCreate):
     return create_ticket(
-        db,
-        ticket.usuario_id,
+        ticket.user_id,
         ticket.funcion_id,
-        ticket.categoria_id
+        ticket.compra_id
     )

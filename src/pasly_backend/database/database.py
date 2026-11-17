@@ -1,33 +1,9 @@
-# database.py
+import sqlite3
 
-from sqlalchemy import create_engine
-from sqlalchemy.orm import DeclarativeBase, sessionmaker
-
-
-DATABASE_URL = "sqlite:///./database.db"
+DATABASE_NAME = "database.db"
 
 
-class Base(DeclarativeBase):
-    pass
-
-
-engine = create_engine(
-    DATABASE_URL,
-    connect_args={"check_same_thread": False}
-)
-
-
-SessionLocal = sessionmaker(
-    bind=engine,
-    autoflush=False,
-    autocommit=False
-)
-
-
-def get_db():
-    db = SessionLocal()
-
-    try:
-        yield db
-    finally:
-        db.close()
+def get_connection():
+    connection = sqlite3.connect(DATABASE_NAME)
+    connection.row_factory = sqlite3.Row
+    return connection
