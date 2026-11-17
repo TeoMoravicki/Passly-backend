@@ -1,3 +1,4 @@
+import logging
 from datetime import timedelta
 from fastapi import APIRouter, Depends
 from fastapi.security import OAuth2PasswordRequestForm
@@ -19,6 +20,8 @@ from .usuarios_model import User
 from .usuarios_service import UserService
 
 router = APIRouter(prefix="/users", tags=["Users"])
+
+logger = logging.getLogger("passly.usuarios")
 
 service = UserService()
 
@@ -68,6 +71,7 @@ def get_my_profile(usuario: User = Depends(obtener_usuario_autenticado)):
 @router.post("/logout", status_code=204)
 def logout(usuario: User = Depends(obtener_usuario_autenticado),token: str = Depends(oauth2_scheme)):
     revoke_access_token(token)
+    logger.info("logout user_id=%s", usuario.id)
 
 
 # Recuperacion de password, paso 1: pedir el token.

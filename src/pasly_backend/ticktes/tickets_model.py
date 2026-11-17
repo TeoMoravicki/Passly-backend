@@ -12,6 +12,12 @@ class Ticket(Base):
         autoincrement=True
     )
 
+    identifier: Mapped[str] = mapped_column(
+        String(50),
+        unique=True,
+        nullable=False
+    )
+
     qr: Mapped[str] = mapped_column(
         String(255),
         unique=True,
@@ -55,5 +61,6 @@ class Ticket(Base):
 
     compra = relationship(
         "Compra",
-        back_populates="tickets"
+        back_populates="ticket",
+        uselist=False
     )

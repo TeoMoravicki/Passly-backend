@@ -1,3 +1,4 @@
+import logging
 import secrets
 from fastapi import HTTPException, status
 from passlib.context import CryptContext
@@ -10,6 +11,8 @@ from .usuarios_model import AsignacionRol, User
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 ROLES_VALIDOS = ("usuario", "administrador")
 PASSWORD_RESET_TTL_SECONDS = 15 * 60
+
+logger = logging.getLogger("passly.usuarios")
 
 
 class UserService:
@@ -33,6 +36,7 @@ class UserService:
                 detail="Ya existe una cuenta registrada con ese email",
             )
         db.refresh(usuario)
+        logger.info("usuario registrado user_id=%s", usuario.id)
         return self.get_user(db, usuario.id)
 
     def get_user(self, db: Session, user_id: int) -> User:
@@ -59,8 +63,10 @@ class UserService:
 
         usuario = db.scalar(select(User).where(User.email == email))
         if usuario is None or not pwd_context.verify(password, usuario.password_hash):
+            logger.warning("login fallido user_id=%s", usuario.id if usuario else "desconocido")
             raise credenciales_invalidas
 
+        logger.info("login exitoso user_id=%s", usuario.id)
         return self.get_user(db, usuario.id)
 
     def obtener_rol_actual(self, db: Session, user_id: int) -> str:
@@ -89,6 +95,7 @@ class UserService:
 
         db.add(AsignacionRol(user_id=user_id, rol=nuevo_rol))
         db.commit()
+        logger.info("rol asignado user_id=%s rol=%s", user_id, nuevo_rol)
 
         return self.get_user(db, user_id)
 
@@ -101,12 +108,14 @@ class UserService:
         get_redis().setex(
             f"pwd_reset:{token}", PASSWORD_RESET_TTL_SECONDS, str(usuario.id)
         )
+        logger.info("recuperacion de password solicitada user_id=%s", usuario.id)
         return token
 
     def resetear_password(self, db: Session, token: str, nueva_password: str) -> None:
 
         user_id = get_redis().getdel(f"pwd_reset:{token}")
         if user_id is None:
+            logger.warning("reset de password rechazado: token invalido o vencido")
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="El token de recuperacion es invalido o ya expiro",
@@ -118,3 +127,4 @@ class UserService:
 
         usuario.password_hash = pwd_context.hash(nueva_password)
         db.commit()
+        logger.info("password restablecida user_id=%s", usuario.id)

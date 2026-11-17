@@ -1,4 +1,5 @@
 from datetime import date
+from decimal import Decimal
 from pydantic import BaseModel
 from typing import Literal
 
@@ -14,14 +15,16 @@ class CompraCreateDTO(BaseModel):
 class CompraResponseDTO(BaseModel):
     id: int
     fecha: date
-    monto: int
+    monto: Decimal
     moneda: str
+    tasa_utilizada: Decimal
     ticket_id: int
     usuario_id: int
 
     model_config = {
         "from_attributes": True
     }
+
 
 class CompraEstadoDTO(BaseModel):
     estado: str
