@@ -27,8 +27,6 @@ pytest_cache/
 # Documentation
 README.md
 
-# Dependency management
-uv.lock
 
 # API testing
 postman/
