@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+
+# IDEs
+.idea/
+.vscode/
+
+# Version control
+.git/
+.gitignore
+
+# Tests
+test/
+pytest_cache/
+.pytest_cache/
+
+# Documentation
+README.md
+
+# Dependency management
+uv.lock
+
+# API testing
+postman/
+.postman/
+
+# Local database
+*.db
+
+# IDE shelf
+.shelf/
